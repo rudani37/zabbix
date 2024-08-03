@@ -1,0 +1,15 @@
+# Dockerfile.zabbix-server-pgsql
+    FROM zabbix/zabbix-server-pgsql:latest
+
+    USER root
+    RUN apk update && apk add --no-cache build-base autoconf automake libtool openssl-dev \
+        && wget https://github.com/curl/curl/releases/download/curl-8_8_0/curl-8.8.0.tar.gz \
+        && tar -xzf curl-8.8.0.tar.gz \
+        && cd curl-8.8.0 \
+        && ./configure --with-openssl \
+        && make \
+        && make install \
+        && cd .. \
+        && rm -rf curl-8.8.0 curl-8.8.0.tar.gz \
+        && apk del build-base autoconf automake libtool
+    USER zabbix
